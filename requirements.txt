@@ -1,0 +1,9 @@
+python-telegram-bot==20.7
+psycopg2-binary
+requests
+python-dotenv
+pydantic
+pydantic-settings
+natasha>=1.6.0
+dateparser>=1.2.0
+python-dateutil>=2.8

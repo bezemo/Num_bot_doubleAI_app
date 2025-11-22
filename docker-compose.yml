@@ -1,0 +1,65 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: num_bot_db
+    environment:
+      POSTGRES_DB: ${DB_NAME:-num_bot}
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-111}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-num_bot}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+    networks:
+      - ai_net
+
+  deepseek:
+    build: ./deepseek-v3
+    container_name: deepseek_local
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./deepseek-v3:/app
+    environment:
+      - MODEL_PATH=/app                    # папка с весами
+      - DEVICE=cpu                         # или cuda:0
+      - MAX_TOKENS=2000
+      - TEMPERATURE=0.7
+    networks:
+      - ai_net
+
+  bot:
+    build: .
+    container_name: num_bot_double_ai
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: ${DB_PORT:-5432}
+      DB_NAME: ${DB_NAME:-num_bot}
+      DB_USER: ${DB_USER:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-111}
+      YANDEX_API_KEY: ${yandex_api_key}
+      YANDEX_FOLDER_ID: ${yandex_folder_id}
+      DEEPSEEK_URL: http://deepseek:8000/v1/chat/completions   # внутри сети
+      DEEPSEEK_TIMEOUT: 30
+    env_file: .env
+    restart: unless-stopped
+    networks:
+      - ai_net
+
+volumes:
+  postgres_data:
+
+networks:
+  ai_net:
+    external: false   # создаётся автоматически
