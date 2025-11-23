@@ -1,0 +1,20 @@
+# /sdd/bots/num_bot_doubleAI_app/deepseek-v3/docker-compose.yml
+version: "3.9"
+services:
+  deepseek:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    environment:
+      - MODEL_PATH=/app
+      - DEVICE=cpu
+      - MAX_TOKENS=2000
+      - TEMPERATURE=0.7
+    networks:
+      - ai_net
+
+networks:
+  ai_net:
+    external: true

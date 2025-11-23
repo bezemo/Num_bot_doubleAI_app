@@ -1,3 +1,4 @@
+# /sdd/bots/num_bot_doubleAI_app/docker-compose.yml
 version: "3.9"
 
 services:
@@ -29,7 +30,7 @@ services:
     volumes:
       - ./deepseek-v3:/app
     environment:
-      - MODEL_PATH=/app                    # папка с весами
+      - MODEL_PATH=/app                    # папка с весами (уже есть)
       - DEVICE=cpu                         # или cuda:0
       - MAX_TOKENS=2000
       - TEMPERATURE=0.7

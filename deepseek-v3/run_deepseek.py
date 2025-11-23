@@ -1,4 +1,4 @@
-# run_deepseek.py  – FastAPI-обёртка над моделью
+# /sdd/bots/num_bot_doubleAI_app/deepseek-v3/run_deepseek.py
 import os
 from fastapi import FastAPI
 from transformers import AutoTokenizer, AutoModelForCausalLM

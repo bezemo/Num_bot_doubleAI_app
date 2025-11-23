@@ -1,4 +1,4 @@
-# deepseek_client.py
+# /sdd/bots/num_bot_doubleAI_app/deepseek_client.py
 import logging
 import requests
 from typing import List
@@ -8,10 +8,6 @@ logger = logging.getLogger(__name__)
 
 
 def generate_via_deepseek(structure: List[str], mode: str) -> str:
-    """
-    Генерирует расширенный эзотерический текст через локальный DeepSeek.
-    API совместимо с YandexGPT: принимает структуру и режим.
-    """
     mode_desc = {
         "default": "краткий эзотерический отчёт",
         "deep": "глубокий нумерологический анализ",
@@ -47,5 +43,4 @@ def generate_via_deepseek(structure: List[str], mode: str) -> str:
         logger.warning("DeepSeek HTTP %s: %s", resp.status_code, resp.text)
     except Exception as e:
         logger.exception("DeepSeek error")
-    # fallback
     return "\n".join(structure) + "\n\n(DeepSeek не ответил)"
